@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreshBite - Online Food Ordering</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <div class="logo">FreshBite 🍕</div>
+    <nav>
+      <a href="#menu">Menu</a>
+      <button id="cart-btn" class="cart-btn">
+        Cart (<span id="cart-count">0</span>)
+      </button>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Delicious Food, Delivered Fast</h1>
+    <p>Freshly prepared meals delivered straight to your door.</p>
+  </section>
+
+  <!-- Main Menu Area -->
+  <main id="menu">
+    <!-- Category Filter Buttons -->
+    <div class="category-filters">
+      <button class="filter-btn active" onclick="filterCategory('All')">All</button>
+      <button class="filter-btn" onclick="filterCategory('Pizza')">Pizza</button>
+      <button class="filter-btn" onclick="filterCategory('Burgers')">Burgers</button>
+      <button class="filter-btn" onclick="filterCategory('Rolls')">Rolls</button>
+    </div>
+
+    <!-- Food Items Grid (Populated dynamically by JavaScript) -->
+    <div id="food-container" class="food-grid"></div>
+  </main>
+
+  <!-- Cart Sidebar/Modal -->
+  <div id="cart-modal" class="cart-modal hidden">
+    <div class="cart-content">
+      <h2>Your Shopping Cart</h2>
+      <div id="cart-items"></div>
+      <div class="cart-summary">
+        <p>Total: $<span id="cart-total">0.00</span></p>
+        <button id="checkout-btn">Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

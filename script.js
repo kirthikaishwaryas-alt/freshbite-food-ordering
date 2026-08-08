@@ -1,4 +1,4 @@
-// Mock Data Array for Food Items
+// Food Items Dataset
 const foodItems = [
   {
     id: 1,
@@ -29,35 +29,34 @@ const foodItems = [
   }
 ];
 
-// Array to hold cart items
+// Cart State Array
 let cart = [];
 
-// Function to render food items to the grid dynamically
+// Render Menu Items
 function renderMenu(items) {
   const container = document.getElementById("food-container");
   if (!container) return;
   
-  container.innerHTML = ""; // Clear existing content
+  container.innerHTML = "";
 
   items.forEach(item => {
     const card = document.createElement("div");
     card.className = "food-card";
     card.innerHTML = `
-      <img src="${item.image}" alt="${item.name}" style="width:100%; height:160px; object-fit:cover; border-radius:8px;">
-      <h3 style="margin-top:0.5rem;">${item.name}</h3>
-      <p style="font-size:0.9rem; color:#666;">${item.description}</p>
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem;">
+      <img src="${item.image}" alt="${item.name}">
+      <h3>${item.name}</h3>
+      <p>${item.description}</p>
+      <div class="card-footer">
         <strong>$${item.price.toFixed(2)}</strong>
-        <button onclick="addToCart(${item.id})" style="background:#FF6B35; color:#fff; border:none; padding:0.4rem 0.8rem; border-radius:5px; cursor:pointer;">Add</button>
+        <button onclick="addToCart(${item.id})">Add to Cart</button>
       </div>
     `;
     container.appendChild(card);
   });
 }
 
-// Function to filter menu by category
+// Category Filter
 function filterCategory(category) {
-  // Update active state on buttons
   const buttons = document.querySelectorAll(".filter-btn");
   buttons.forEach(btn => {
     btn.classList.toggle("active", btn.textContent === category);
@@ -71,26 +70,87 @@ function filterCategory(category) {
   }
 }
 
-// Function to handle adding items to the cart
+// Add Item to Cart
 function addToCart(id) {
-  const item = foodItems.find(p => p.id === id);
-  if (item) {
-    cart.push(item);
-    document.getElementById("cart-count").innerText = cart.length;
-    updateCartTotal();
+  const existingItem = cart.find(item => item.id === id);
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    const product = foodItems.find(p => p.id === id);
+    cart.push({ ...product, quantity: 1 });
   }
+  updateCartUI();
 }
 
-// Function to update cart total calculation
-function updateCartTotal() {
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
-  const totalElement = document.getElementById("cart-total");
-  if (totalElement) {
-    totalElement.innerText = total.toFixed(2);
+// Change Item Quantity (+ / -)
+function updateQuantity(id, change) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+
+  item.quantity += change;
+  if (item.quantity <= 0) {
+    cart = cart.filter(i => i.id !== id);
   }
+  updateCartUI();
 }
 
-// Initial rendering on page load
+// Render Cart Modal Contents
+function renderCartItems() {
+  const cartContainer = document.getElementById("cart-items");
+  if (!cartContainer) return;
+
+  if (cart.length === 0) {
+    cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+    return;
+  }
+
+  cartContainer.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div>
+        <strong>${item.name}</strong>
+        <p>$${item.price.toFixed(2)} x ${item.quantity}</p>
+      </div>
+      <div class="quantity-controls">
+        <button onclick="updateQuantity(${item.id}, -1)">-</button>
+        <span>${item.quantity}</span>
+        <button onclick="updateQuantity(${item.id}, 1)">+</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+// Update Cart Count and Subtotal
+function updateCartUI() {
+  const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  document.getElementById("cart-count").innerText = totalCount;
+  document.getElementById("cart-total").innerText = totalPrice.toFixed(2);
+  renderCartItems();
+}
+
+// Toggle Cart Modal
+function toggleCartModal() {
+  const modal = document.getElementById("cart-modal");
+  modal.classList.toggle("hidden");
+}
+
+// Simulated Checkout
+function handleCheckout() {
+  if (cart.length === 0) {
+    alert("Your cart is empty!");
+    return;
+  }
+  alert("🎉 Order placed successfully! Thank you for ordering from FreshBite.");
+  cart = [];
+  updateCartUI();
+  toggleCartModal();
+}
+
+// Event Listeners Initialization
 document.addEventListener("DOMContentLoaded", () => {
   renderMenu(foodItems);
+
+  document.getElementById("cart-btn")?.addEventListener("click", toggleCartModal);
+  document.getElementById("checkout-btn")?.addEventListener("click", handleCheckout);
 });

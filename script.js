@@ -1,4 +1,4 @@
-// Food Items Dataset
+// Mock Food Items Dataset
 const foodItems = [
   {
     id: 1,
@@ -29,10 +29,10 @@ const foodItems = [
   }
 ];
 
-// Cart State Array
+// Shopping Cart State
 let cart = [];
 
-// Render Menu Items
+// Display Menu Items
 function renderMenu(items) {
   const container = document.getElementById("food-container");
   if (!container) return;
@@ -55,7 +55,7 @@ function renderMenu(items) {
   });
 }
 
-// Category Filter
+// Category Filter Logic
 function filterCategory(category) {
   const buttons = document.querySelectorAll(".filter-btn");
   buttons.forEach(btn => {
@@ -82,7 +82,7 @@ function addToCart(id) {
   updateCartUI();
 }
 
-// Change Item Quantity (+ / -)
+// Adjust Item Quantity (+ / -)
 function updateQuantity(id, change) {
   const item = cart.find(i => i.id === id);
   if (!item) return;
@@ -94,13 +94,13 @@ function updateQuantity(id, change) {
   updateCartUI();
 }
 
-// Render Cart Modal Contents
+// Render Cart Modal Items
 function renderCartItems() {
   const cartContainer = document.getElementById("cart-items");
   if (!cartContainer) return;
 
   if (cart.length === 0) {
-    cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+    cartContainer.innerHTML = "<p style='margin-top:1rem;'>Your cart is empty.</p>";
     return;
   }
 
@@ -119,7 +119,7 @@ function renderCartItems() {
   `).join("");
 }
 
-// Update Cart Count and Subtotal
+// Update Totals and Cart Badge Counter
 function updateCartUI() {
   const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -129,13 +129,13 @@ function updateCartUI() {
   renderCartItems();
 }
 
-// Toggle Cart Modal
+// Toggle Modal Window
 function toggleCartModal() {
   const modal = document.getElementById("cart-modal");
   modal.classList.toggle("hidden");
 }
 
-// Simulated Checkout
+// Checkout Logic
 function handleCheckout() {
   if (cart.length === 0) {
     alert("Your cart is empty!");
@@ -147,7 +147,7 @@ function handleCheckout() {
   toggleCartModal();
 }
 
-// Event Listeners Initialization
+// Application Initialization
 document.addEventListener("DOMContentLoaded", () => {
   renderMenu(foodItems);
 

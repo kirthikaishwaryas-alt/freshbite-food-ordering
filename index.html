@@ -35,17 +35,18 @@
       <button class="filter-btn" onclick="filterCategory('Rolls')">Rolls</button>
     </div>
 
-    <!-- Food Items Grid (Populated dynamically by JavaScript) -->
+    <!-- Food Items Grid -->
     <div id="food-container" class="food-grid"></div>
   </main>
 
-  <!-- Cart Sidebar/Modal -->
+  <!-- Cart Modal Overlay -->
   <div id="cart-modal" class="cart-modal hidden">
     <div class="cart-content">
+      <button class="close-btn" onclick="toggleCartModal()">✖</button>
       <h2>Your Shopping Cart</h2>
       <div id="cart-items"></div>
       <div class="cart-summary">
-        <p>Total: $<span id="cart-total">0.00</span></p>
+        <p><strong>Total: $<span id="cart-total">0.00</span></strong></p>
         <button id="checkout-btn">Proceed to Checkout</button>
       </div>
     </div>
